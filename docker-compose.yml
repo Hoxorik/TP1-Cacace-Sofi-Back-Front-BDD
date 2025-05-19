@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./TP1-Cacace-Sofi-Frontend
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+    depends_on:
+      - backend
+    restart: always
+
+  backend:
+    build:
+      context: ./TP1-Cacace-Sofi-Backend
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    volumes:
+      - ./TP1-Cacace-Sofi-Backend/db.sqlite:/app/db.sqlite
+    environment:
+      - DATABASE_PATH=/app/db.sqlite
+      - API_URL=http://localhost:3000/libro
+      - DB_HOST=localhost
+      - DB_PORT=5432
+    restart: always
+
+networks:
+  app-network:
+    driver: bridge
+
